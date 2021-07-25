@@ -10,9 +10,9 @@ const App = () =>
   <Router>
     <Switch>
       <Route exact path='/'><Redirect to='/login'/></Route>
-      <Route path='/login'         component={Login}  />
-      <Route path='/oauth2/auth'   component={Auth}   />
-      <Route path='/oauth2/verify' component={Verify} />
+      <Route path='/login'  component={Login}  />
+      <Route path='/oauth2' component={Auth}   />
+      <Route path='/verify' component={Verify} />
     </Switch>
   </Router>;
 

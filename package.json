@@ -3,15 +3,15 @@
   "author": "Hadrien Croubois (@Amxx)",
   "version": "0.1.0",
   "licence": "MIT",
-  "homepage": ".",
+  "homepage": "./",
   "scripts": {
     "app:start": "react-scripts start",
     "app:build": "react-scripts build",
     "app:test": "react-scripts test",
     "app:eject": "react-scripts eject",
+    "app:deploy": "rsync -avzz --delete build/* hadriencroubois.com:/mnt/sata/http/apps/web3oauth/.",
     "daemon:build": "tsc src/daemon/index.ts --esModuleInterOp --outdir build",
-    "daemon:start": "node build/daemon/index.js",
-    "deploy": "rsync -avzz --delete build/* hadriencroubois.com:/mnt/sata/http/apps/web3oauth/."
+    "daemon:start": "node build/daemon/index.js"
   },
   "dependencies": {
     "@walletconnect/web3-provider": "^1.4.1",
