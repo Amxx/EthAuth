@@ -6,10 +6,7 @@ import WalletConnectProvider from '@walletconnect/web3-provider';
 import Loading from './Loading';
 
 const WALLETCONNECT_CONFIG = {
-  // infuraId: 'c4ab9a26a54148e288b6e010a65a8f18',
-  rpc: {
-    1: 'https://rpcmainnet1w7wagudqhtw5khzsdtv.iex.ec',
-  },
+  infuraId: '9D13ZE7XSBTJ94N9BNJ2MA33VMAY2YPIRB',
 }
 
 const Auth = ({ location }) => {
