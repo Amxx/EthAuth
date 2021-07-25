@@ -1,8 +1,9 @@
 import * as React     from 'react';
-import * as Web3      from '../utils/Web3';
-import * as Web3OAuth from '../utils/Web3OAuth';
+import * as Web3      from '../../utils/Web3';
+import * as Web3OAuth from '../../utils/Web3OAuth';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 
+import Loading from './Loading';
 
 const WALLETCONNECT_CONFIG = {
   // infuraId: 'c4ab9a26a54148e288b6e010a65a8f18',
@@ -30,7 +31,7 @@ const Auth = ({ location }) => {
 
   }, [ location.search ]);
 
-  return null;
+  return <Loading/>;
 };
 
 export default Auth;
