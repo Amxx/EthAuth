@@ -14,7 +14,7 @@
     "daemon:start": "node build/daemon/index.js"
   },
   "dependencies": {
-    "@walletconnect/web3-provider": "^1.4.1",
+    "@walletconnect/web3-provider": "^1.5.0",
     "body-parser": "^1.19.0",
     "bootstrap": "^5.0.2",
     "ethers": "^5.4.2",
