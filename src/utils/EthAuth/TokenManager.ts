@@ -61,9 +61,10 @@ export class TokenManager {
     return Token.fromObject({ identity, payload, signature });
   }
 
-  static async verifyToken({ identity, payload, signature }: IToken): Promise<{ isValid: boolean, account?: string}> {
-    var isValid: boolean;
+  static async verifyToken(token: IToken | string): Promise<{ isValid: boolean, account?: string}> {
+    const { identity, payload, signature } = typeof(token) === 'string' ? Token.fromString(token) : token;
 
+    var isValid: boolean;
     switch (identity.namespace) {
       case 'evm':
         // ERC712 hash
@@ -74,7 +75,9 @@ export class TokenManager {
         );
 
         isValid = await [
+          // Check EOA
           () => getAddress(identity.account) === recoverAddress(structHash, signature),
+          // Fallback, check 1271
           () => {
             const contract = new Contract(identity.account, ERC1271ABI, getProviderByChainId(identity.reference));
             return contract

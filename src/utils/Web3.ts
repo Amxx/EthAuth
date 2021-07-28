@@ -19,7 +19,7 @@ export function getProviderByChainId(chainid: number | string): Provider {
   const rpc: string | undefined = chain.rpc
     .map((str: string) => {
       try {
-        return str.replaceAll(/\$\{(\w+)\}/g, (_, varname) => process.env[varname] || revert() );
+        return str.replace(/\$\{(\w+)\}/g, (_, varname) => process.env[varname] || revert() );
       } catch (_) {
         return undefined;
       }
