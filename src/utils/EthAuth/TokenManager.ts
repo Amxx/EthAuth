@@ -9,15 +9,13 @@ import { Contract          } from '@ethersproject/contracts';
 import { getAddress        } from '@ethersproject/address';
 import { _TypedDataEncoder } from '@ethersproject/hash';
 import { recoverAddress    } from '@ethersproject/transactions';
-import { CAIP10            } from '../CAIP10';
-import { Payload, IPayload } from './Payload';
-import { Token,   IToken   } from './Token';
 
-
+import { CAIP10               } from '../CAIP10';
+import { Payload, IPayload    } from './Payload';
+import { Token,   IToken      } from './Token';
+import { getProviderByChainId } from '../Web3';
 
 const ERC1271ABI = [ 'function isValidSignature(bytes32, bytes) public view returns (bytes4)' ];
-
-
 
 export class TokenManager {
   static readonly domain: TypedDataDomain = {
@@ -78,8 +76,7 @@ export class TokenManager {
         isValid = await [
           () => getAddress(identity.account) === recoverAddress(structHash, signature),
           () => {
-            // TODO: get provider for chain `identity.reference`
-            const contract = new Contract(identity.account, ERC1271ABI, /* provider */);
+            const contract = new Contract(identity.account, ERC1271ABI, getProviderByChainId(identity.reference));
             return contract
               .isValidSignature(structHash, signature)
               .then((result: string) => result === '0x1626ba7e')
