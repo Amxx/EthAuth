@@ -1,9 +1,9 @@
 import { ExternalProvider, Web3Provider } from '@ethersproject/providers'
 
-export function tryGetProvider(ethereum: ExternalProvider) {
+export function tryGetProvider(ethereum: ExternalProvider & { enable?: () => Promise<void> }): Promise<Web3Provider> {
   return new Promise((resolve, reject) => {
-    if ((ethereum as any).enable) {
-      (ethereum as any).enable()
+    if (ethereum.enable) {
+      ethereum.enable()
         .then(() => resolve(new Web3Provider(ethereum)))
         .catch(reject);
     } else if (ethereum.request) {
