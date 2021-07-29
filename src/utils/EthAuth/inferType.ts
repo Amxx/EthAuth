@@ -45,7 +45,7 @@ export function inferType(value: BigNumberish): string {
       try {
         const bn = BigNumber.from(value);
         if (bn.gte(0) && bn.lte(MaxUint256)) return 'uint256';
-        if (bn.lt(0)  && bn.gte(MinInt256))  return 'uint256';
+        if (bn.lt(0)  && bn.gte(MinInt256))  return 'int256';
       } catch (_) {}
     }
 
