@@ -26,7 +26,8 @@ const Auth = ({ location }) => {
     .then(provider => TokenManager.signToken(
       provider.getSigner(0),
       {
-        app: params.get('clientId') || '*',
+        aud: params.get('clientId') || '*',
+        red: params.get('redirect_uri'),
         iat: (Date.now() / 1000 | 0),
         exp: (Date.now() / 1000 | 0) + 86400,
       },

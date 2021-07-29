@@ -1,3 +1,3 @@
-export * from './Payload';
-export * from './Token';
-export * from './TokenManager';
+export * as Payload      from './Payload';
+export * as Token        from './Token';
+export * as TokenManager from './TokenManager';

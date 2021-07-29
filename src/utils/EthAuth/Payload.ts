@@ -1,42 +1,20 @@
-import { BigNumberish } from '@ethersproject/bignumber';
+import { BigNumberish   } from '@ethersproject/bignumber';
+import { TypedDataField } from '@ethersproject/abstract-signer';
 
-export type IPayload = {
-  app:   string,
-  iat:   BigNumberish,
-  exp:   BigNumberish,
-  salt?: BigNumberish,
-  typ?:  string,
-  ogn?:  string,
+import { inferType } from './inferType';
+
+export type Payload = Record<string, BigNumberish>;
+
+export function fromString(str: string): Payload {
+  return JSON.parse(str);
 };
 
-export class Payload implements IPayload {
-  app!:  string
-  iat!:  BigNumberish
-  exp!:  BigNumberish
-  salt?: BigNumberish
-  typ?:  string
-  ogn?:  string
+export function toString(payload: Payload): string {
+  return JSON.stringify(payload);
+};
 
-  constructor(that: IPayload) {
-    Object.assign(this, that);
-  }
-
-  toString(): string {
-    return JSON.stringify({
-      app:  this.app,
-      iat:  this.iat,
-      exp:  this.exp,
-      salt: this.salt,
-      typ:  this.typ,
-      ogn:  this.ogn,
-    });
-  }
-
-  static fromObject(that: IPayload): Payload {
-    return new Payload(that);
-  }
-
-  static fromString(str: string): Payload {
-    return new Payload(JSON.parse(str));
-  }
-}
+export function toTypedDataFieldArray(payload: Payload): Record<string, Array<TypedDataField>> {
+  return {
+    Payload: Object.entries(payload).map(([ name, value ]) => ({ name, type: inferType(value) })),
+  };
+};

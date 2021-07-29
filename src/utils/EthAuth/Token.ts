@@ -1,42 +1,44 @@
 import base64url             from 'base64url';
+import { TypedDataField    } from '@ethersproject/abstract-signer';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 
-import { CAIP10,  ICAIP10  } from '../CAIP10';
-import { Payload, IPayload } from './Payload';
+import * as CAIP10  from '../CAIP10';
+import * as Payload from './Payload';
 
-export type IToken = {
-  identity:  ICAIP10,
-  payload:   IPayload,
-  signature: string,
+export type PartialToken = {
+  identity:  CAIP10.CAIP10,
+  payload:   Payload.Payload,
+  signature?: string,
 };
 
-export class Token implements IToken {
-  identity!:  CAIP10;
-  payload!:   Payload;
-  signature!: string;
+export type Token = Required<PartialToken>;
 
-  constructor(that: IToken) {
-    Object.assign(this, that);
-  }
+export function fromString(str: string): Token {
+  const [ identity, payload, signature ] = str.split('.');
+  return {
+    identity:  CAIP10.fromString(base64url.decode(identity)),
+    payload:   Payload.fromString(base64url.decode(payload)),
+    signature: hexlify(base64url.toBuffer(signature)),
+  };
+};
 
-  toString(): string {
-    return [
-      base64url.encode(this.identity.toString()),
-      base64url.encode(this.payload.toString()),
-      base64url.encode(Buffer.from(arrayify(this.signature)))
-    ].join('.');
-  }
+export function toString(token: Token): string {
+  return [
+    base64url.encode(CAIP10.toString(token.identity)),
+    base64url.encode(Payload.toString(token.payload)),
+    base64url.encode(Buffer.from(arrayify(token.signature)))
+  ].join('.');
+};
 
-  static fromObject(that: IToken): Token {
-    return new Token(that);
-  }
-
-  static fromString(str: string): Token {
-    const [ identity, payload, signature ] = str.split('.');
-    return new Token({
-      identity:  CAIP10.fromString(base64url.decode(identity)),
-      payload:   Payload.fromString(base64url.decode(payload)),
-      signature: hexlify(base64url.toBuffer(signature)),
-    });
-  }
-}
+export function toTypedDataFieldArray(token: PartialToken): Record<string, Array<TypedDataField>> {
+  return Object.assign(
+    {
+      EthAuthToken: [
+        { name: 'identity', type: 'CAIP10'  },
+        { name: 'payload',  type: 'Payload' },
+      ],
+    },
+    CAIP10.toTypedDataFieldArray(token.identity),
+    Payload.toTypedDataFieldArray(token.payload),
+  );
+};
